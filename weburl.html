@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       <title>Shorturl</title>
+    </head>
+    <style>
+        body {
+            margin: 0;
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;     
+            background-color: #f5f5f5;
+        }
+        h1{ 
+            text-align: center;        
+            font-size: 90px;           
+            font-family: Arial;
+            color: #333;             
+        }
+        button {
+            background-color: #0e1b25;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .input_text{
+            padding: 12px 10px;
+            font-size: 40px;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+        }
+        #outputBox {
+            height: 25px;
+            width: 500px;
+            border: 1px solid;
+            border-color: black;
+        }
+    </style>
+    <body>
+         <h1>Generate Short URL</h1>
+         <div class="input_text">
+                <input type="text" id="longurl" placeholder="paste the url here">
+                <button onclick="sendurl()">shorten</button>
+         </div>
+         <textarea id="outputBox" style="resize: none;" readonly></textarea>
+    </body>
+    <script>
+        async function sendurl(){
+            const input = document.getElementById('longurl').value;
+            const response = await fetch('http://localhost:5500/post-url',{
+                method : "POST",
+                headers: {
+                    'content-type' : 'application/json'
+                },
+                body: JSON.stringify({longURL : input})
+                
+            })
+            const data = await response.json();
+            console.log(data);
+            const textareaElement = document.getElementById("outputBox");
+            textareaElement.value = "http://localhost:5500/?id="+data;
+        }
+    </script>
+</html>
